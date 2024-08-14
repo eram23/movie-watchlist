@@ -1,7 +1,8 @@
 const searchInput = document.getElementById('search-input')
 const searchBtn = document.getElementById('search-btn')
 const searchListContainer = document.getElementById('searchlist-container')
-const watchlistContainer = document.getElementById('watchlist-container')
+let savedMoviesArr = []
+export let savedMoviesHtml = []
 
 searchBtn.addEventListener('click', () => {
     // THIS FETCH REQUEST GETS AN ARRAY OF THE MOVIES THAT MATCH THE SEARCH INPUT
@@ -9,8 +10,7 @@ searchBtn.addEventListener('click', () => {
         .then(res => res.json())
         .then(data => {
 
-        let searchResultsHtml = ''
-        let savedMoviesHtml = ''
+        let searchResultsHtml = '' 
 
         // THIS FOR LOOP GETS THE DETAILS OF EACH MOVIE AND RENDERS EACH ONE
         for (let item of data.Search) {
@@ -19,7 +19,7 @@ searchBtn.addEventListener('click', () => {
                 .then(individualMovie => {
 
                 // loops through render function and adds each movie result to searchResultsHtml
-                searchResultsHtml += movieHtml(individualMovie)
+                searchResultsHtml += searchMovieHtml(individualMovie)
                 
                 // renders searchResultsHtml to the searchListContainer on the main index.html
                 searchListContainer.innerHTML = searchResultsHtml
@@ -28,32 +28,26 @@ searchBtn.addEventListener('click', () => {
                 document.addEventListener('click', (event) => {
                 
                     if (event.target.dataset.id === individualMovie.imdbID) {
-                        // console.log(event.target.data)
-                        addMovieToLocalStorage(individualMovie.Title, movieHtml(individualMovie))
+                        if( !savedMoviesHtml.includes(individualMovie.imdbID) ) { //only adds movie if it has not been added yet (checkds imdb id)
+                            if(!savedMoviesHtml === null) {
+                                savedMoviesHtml = localStorage.getItem('data') //gets previously added movies only if there is not a null value
+                            }
+                            savedMoviesHtml += watchListMovieHtml(individualMovie)
+                            localStorage.setItem('data', savedMoviesHtml)
+                        }
                         
                     }
                 })
 
-                getMoviesFromLocalStorage(individualMovie.Title)
+
             })
             
         }
-        
-        })    
+        })
 })
 
-function getMoviesFromLocalStorage(thisMovieName) {
-    watchlistContainer.innerHTML = localStorage.getItem(thisMovieName)
-}
-
-
-// saves a movie item to localstorage
-function addMovieToLocalStorage(thisMovieName, thisMovie) {
-    localStorage.setItem(thisMovieName, thisMovie)
-}
-
-// returns the html for a single movie result
-function movieHtml(item) {
+// returns a single html for search result
+function searchMovieHtml(item) {
     return `
     <div class="movie-container">
         <div class="movie-poster-container">
@@ -71,3 +65,24 @@ function movieHtml(item) {
     </div>
     `
 }
+
+// returns a single html for watchlist
+function watchListMovieHtml(item) {
+    return `
+    <div class="movie-container">
+        <div class="movie-poster-container">
+            <img src="${item.Poster}" class="movie-poster">
+        </div>
+        <div class="movie-details-container">
+            <h2>${item.Title} <span class="rating"><i class="fa-solid fa-star" style="color: #74C0FC;"></i>${item.imdbRating}/10</span></h2>
+            <ul>
+                <li>${item.Runtime}</li>
+                <li>${item.Genre}</li>
+                <li><button class="watchlist-btn" data-id="${item.imdbID}"><i class="fa-solid fa-circle-minus"></i>watchlist</button></li>
+            </ul>
+            <p>${item.Plot}</p>
+        </div>
+    </div>
+    `
+}
+
