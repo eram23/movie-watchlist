@@ -1,5 +1,4 @@
 const watchlistContainer = document.getElementById('watchlist-container')
-import { savedMoviesHtml } from 'index'
 
 
 function getMoviesFromLocalStorage() {
@@ -11,10 +10,10 @@ function getMoviesFromLocalStorage() {
 
 document.addEventListener('click', (event) => {
 
-        console.log(event.target.tagName)
+        // console.log(savedMoviesHtml)
         if(event.target.tagName === 'BUTTON') {
             event.target.parentElement.parentElement.parentElement.parentElement.remove();
-            // saveData()
+            localStorage.setItem('data', watchlistContainer.innerHTML)
         }
 
 })

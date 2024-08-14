@@ -2,7 +2,7 @@ const searchInput = document.getElementById('search-input')
 const searchBtn = document.getElementById('search-btn')
 const searchListContainer = document.getElementById('searchlist-container')
 let savedMoviesArr = []
-export let savedMoviesHtml = []
+let savedMoviesHtml = []
 
 searchBtn.addEventListener('click', () => {
     // THIS FETCH REQUEST GETS AN ARRAY OF THE MOVIES THAT MATCH THE SEARCH INPUT
@@ -85,4 +85,3 @@ function watchListMovieHtml(item) {
     </div>
     `
 }
-
