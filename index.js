@@ -6,7 +6,7 @@ let savedMoviesHtml = []
 
 searchBtn.addEventListener('click', () => {
     // THIS FETCH REQUEST GETS AN ARRAY OF THE MOVIES THAT MATCH THE SEARCH INPUT
-    fetch(`http://www.omdbapi.com/?apikey=72fd1c8d&s=${searchInput.value}&type=movie&page=1&plot=full`)
+    fetch(`https://www.omdbapi.com/?apikey=72fd1c8d&s=${searchInput.value}&type=movie&page=1&plot=full`)
         .then(res => res.json())
         .then(data => {
 
@@ -14,7 +14,7 @@ searchBtn.addEventListener('click', () => {
 
         // THIS FOR LOOP GETS THE DETAILS OF EACH MOVIE AND RENDERS EACH ONE
         for (let item of data.Search) {
-            fetch(`http://www.omdbapi.com/?apikey=72fd1c8d&t=${item.Title}&type=movie&page=1&plot=short`)
+            fetch(`https://www.omdbapi.com/?apikey=72fd1c8d&t=${item.Title}&type=movie&page=1&plot=short`)
                 .then(res => res.json())
                 .then(individualMovie => {
 
